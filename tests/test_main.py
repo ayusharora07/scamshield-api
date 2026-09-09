@@ -1,11 +1,6 @@
-from fastapi.testclient import TestClient
 import pytest
 
-from app.main import app
-client = TestClient(app)
-
-
-def test_email_check():
+def test_email_check(client):
     response = client.post(
         "/email",
         json={
@@ -21,7 +16,7 @@ def test_email_check():
     assert "reason" in result
 
 
-def test_audio_check():
+def test_audio_check(client):
     with open(r"tests/test_audio.m4a", "rb") as audio:
         response = client.post("/audio", files={"file": audio})
         assert response.status_code == 200
@@ -38,7 +33,7 @@ def audio_bytes():
         yield audio.read()
 
 
-def test1(audio_bytes):
+def test1(client, audio_bytes):
     with client.websocket_connect("/ws") as websocket:
         websocket.send_bytes(audio_bytes)
         result = websocket.receive_json()
