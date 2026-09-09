@@ -56,7 +56,7 @@ def audio_bytes():
 
 def test1(client, audio_bytes, mocker):
     mocker.patch("app.api.analyze.audio_transcript", return_value="Sample audio text")
-    
+
     mock_assessment = MagicMock()
     mock_assessment.model_dump.return_value = {
         "label": "spam",
